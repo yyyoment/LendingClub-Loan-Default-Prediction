@@ -8,9 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
-<style>
-  div.prompt {display:none}
-  </style>
+
 <style type="text/css">
     /*!
 *
@@ -13098,7 +13096,33 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">HTML</span>
 
+<span class="n">HTML</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;&lt;script&gt;</span>
+<span class="s1">  function code_toggle() {</span>
+<span class="s1">    if (code_shown){</span>
+<span class="s1">      $(&#39;div.input&#39;).hide(&#39;500&#39;);</span>
+<span class="s1">      $(&#39;#toggleButton&#39;).val(&#39;Show Code&#39;)</span>
+<span class="s1">    } else {</span>
+<span class="s1">      $(&#39;div.input&#39;).show(&#39;500&#39;);</span>
+<span class="s1">      $(&#39;#toggleButton&#39;).val(&#39;Hide Code&#39;)</span>
+<span class="s1">    }</span>
+<span class="s1">    code_shown = !code_shown</span>
+<span class="s1">  }</span>
+
+<span class="s1">  $( document ).ready(function(){</span>
+<span class="s1">    code_shown=false;</span>
+<span class="s1">    $(&#39;div.input&#39;).hide()</span>
+<span class="s1">  });</span>
+<span class="s1">&lt;/script&gt;</span>
+<span class="s1">&lt;form action=&quot;javascript:code_toggle()&quot;&gt;&lt;input type=&quot;submit&quot; id=&quot;toggleButton&quot; value=&quot;Show Code&quot;&gt;&lt;/form&gt;&#39;&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
 </div>
 
 <div class="output_wrapper">
@@ -13680,12 +13704,15 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>My data cleaning methodology and findings are listed as below.</p>
-
-<pre><code>- First, I looked at all the variables. I found that there are some variables containing information that happens after the loan underwriting. Since it may raise data leakage issues, I chose to drop them. In addition, some variables are not relevant to one's ability to pay the loan, such as the state information. I dropped there variables as well.
-- Second, I found that there are four columns in total with missing values. As for those with more than 40% NAs, I chose to drop them. Also, for the emp_length column with only a few NAs, I chose to drop the rows with missing value in this column.
-- Third, there are a few outliers (9999) in the `dit` column. However, they have already been dropped in the second step.
-- Fourth, I dealt with the nominal and ordinal variables in the dataset. emp_length is the only ordinal variable. I assigned different numbers to different levels accordingly to convert it into a numerical variable that can be fed into the model. As for the four nominal variables, I used the get_dummies() function to conduct one-hot encoding.
-- Fifth, since there are some variables containing really large values, such as `annual_inc` and `dit`, I decided to normalize the data to ensure the model performance.</code></pre>
+<ol>
+<li>First, I looked at all the variables. I found that there are some variables containing information that happens after the loan underwriting. Since it may raise data leakage issues, I chose to drop them. In addition, some variables are not relevant to one's ability to pay the loan, such as the state information. I dropped there variables as well.</li>
+</ol>
+<ul>
+<li>Second, I found that there are four columns in total with missing values. As for those with more than 40% NAs, I chose to drop them. Also, for the emp_length column with only a few NAs, I chose to drop the rows with missing value in this column.</li>
+<li>Third, there are a few outliers (9999) in the <code>dit</code> column. However, they have already been dropped in the second step.</li>
+<li>Fourth, I dealt with the nominal and ordinal variables in the dataset. emp_length is the only ordinal variable. I assigned different numbers to different levels accordingly to convert it into a numerical variable that can be fed into the model. As for the four nominal variables, I used the get_dummies() function to conduct one-hot encoding.</li>
+<li>Fifth, since there are some variables containing really large values, such as <code>annual_inc</code> and <code>dit</code>, I decided to normalize the data to ensure the model performance.</li>
+</ul>
 
 </div>
 </div>
@@ -16648,18 +16675,18 @@ Best cross-validation score: 0.61060
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Are there any ways to derive additional variables that would improve the model prediction accuracy?</strong></p>
-
-<pre><code>- dti_range: Since the orignial dti variable is a continuous feature that needs to be scaled before putting into the model, we can categorize it into several groups / bins. For example, if dti &gt; 10 and dti &lt;= 20, this observation belongs to the dti_range_1020 group.
-- annual_inc_range: The same as dti_range
-- loan_pay_times: When making decisions, one of our assumption is that all the Defaults are created equal. People who becomes default in their first payment should not be treated as the same as the people who becomes default in their very last payment. With that being said, a label that can categorize different default behaviour is needed. 
-
-</code></pre>
+<ul>
+<li>dti_range: Since the orignial dti variable is a continuous feature that needs to be scaled before putting into the model, we can categorize it into several groups / bins. For example, if dti &gt; 10 and dti &lt;= 20, this observation belongs to the dti_range_1020 group.</li>
+<li>annual_inc_range: The same as dti_range</li>
+<li>loan_pay_times: When making decisions, one of our assumption is that all the Defaults are created equal. People who becomes default in their first payment should not be treated as the same as the people who becomes default in their very last payment. With that being said, a label that can categorize different default behaviour is needed. </li>
+</ul>
 <p><strong>What variables, if any, can be used to create business rules that can be used to decline customer’s application before the model runs?</strong></p>
-
-<pre><code>- Whether a customer has any defaults before: If a customer has many default records before (or in the last 12 months), we need to be careful when considering his/her application.
-- Employment length (emp_length) &amp; income (annual_inc): If a person has a relatively short employment length or low income, we may assume that his/her ability to pay the loan is not very strong. We can use these variable to decline customer's application before the model runs.
-- Low FICO / credit score: the loan company would not want to give loan to person with low FICO / credit score.
-- Low dti / Large Loan Amount: dti reflects a person's ability to pay the debts. If one has a low dti, the loan company would tend to have less confidence in his/her ability to pay the new loan. Also, a large loan amount would place a heavy financial burden on the applicant. It would result in high risk of not paying back the loan.</code></pre>
+<ul>
+<li>Whether a customer has any defaults before: If a customer has many default records before (or in the last 12 months), we need to be careful when considering his/her application.</li>
+<li>Employment length (emp_length) &amp; income (annual_inc): If a person has a relatively short employment length or low income, we may assume that his/her ability to pay the loan is not very strong. We can use these variable to decline customer's application before the model runs.</li>
+<li>Low FICO / credit score: the loan company would not want to give loan to person with low FICO / credit score.</li>
+<li>Low dti / Large Loan Amount: dti reflects a person's ability to pay the debts. If one has a low dti, the loan company would tend to have less confidence in his/her ability to pay the new loan. Also, a large loan amount would place a heavy financial burden on the applicant. It would result in high risk of not paying back the loan.</li>
+</ul>
 
 </div>
 </div>
